@@ -51,29 +51,7 @@ Bitir
 
 ## AKIŞ ŞEMASI
 
-BAŞLA
-  |
-Seed, N, mod al
-  |
-x = seed
-  |
-i = 1
-  |
-i ≤ N ?
- ├─ Hayır → BİTİR
- └─ Evet
-        |
-      x çift mi?
-       ├─ Evet → x = x / 2
-       └─ Hayır → x = 3x + 1
-              |
-        r = x mod mod
-              |
-          r yazdır
-              |
-          i = i + 1
-              |
-        geri → i ≤ N ?
+![Uploading image.png…]()
 
 
 ```bash

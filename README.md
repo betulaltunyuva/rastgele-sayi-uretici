@@ -1,81 +1,125 @@
-# Rastgele Sayı Üreteci (Collatz Tabanlı)
+# Collatz Tabanlı Rastgele Sayı Üretimi
 
-Bu proje, **Collatz dizisi (Collatz teoremi)** kullanılarak geliştirilmiş
-basit bir **sözde rastgele sayı üreteci (PRNG)** örneğidir.
+Bu çalışma, **Bilgi Sistemleri Güvenliği** dersi kapsamında,
+**Collatz Varsayımı (3n + 1 problemi)** temel alınarak geliştirilmiş
+basit bir **sözde rastgele sayı üretici** örneğini içermektedir.
 
-Üreteç deterministiktir; yani aynı başlangıç değeri (**seed**) kullanıldığında
-aynı çıktı dizisi elde edilir.  
-Bu nedenle **kriptografik amaçlar için uygun değildir** ve yalnızca
-eğitim / analiz amacıyla hazırlanmıştır.
-
----
-
-## Kullanılan Yöntem – Collatz Dizisi
-
-Collatz dizisi aşağıdaki kurala göre çalışır:
-
-- Eğer sayı **çift** ise → `n = n / 2`
-- Eğer sayı **tek** ise → `n = 3n + 1`
-
-Bu projede:
-- Collatz işlemleri tekrar edilerek sayı üretilir
-- Her adımda elde edilen değer, `mod` işlemi ile
-  belirli bir aralıkta sözde rastgele sayıya dönüştürülür
+Oluşturulan sistem deterministik yapıdadır.  
+Yani aynı başlangıç değeri (**seed**) ile her çalıştırmada aynı çıktı dizisi elde edilir.
+Bu nedenle gerçek kriptografik sistemler için uygun değildir ve
+**yalnızca akademik / eğitsel amaçlıdır**.
 
 ---
 
-## Sözde Kod (Pseudocode)
+## Matematiksel Arka Plan (Collatz Yaklaşımı)
 
-**Girdi:**
-- `seed` → başlangıç değeri  
-- `N` → üretilecek sayı adedi  
-- `mod` → sayıların üretileceği aralık  
+Collatz Varsayımı’na göre herhangi bir pozitif tam sayı için aşağıdaki kurallar uygulanır:
 
-**Çıktı:**
-- `0` ile `mod - 1` arasında sözde rastgele sayılar
+- Sayı **çift** ise → `n = n / 2`
+- Sayı **tek** ise → `n = 3n + 1`
 
-```text
-Başla
-x ← seed
+Bu işlemler tekrarlandığında, sayıların sonunda **1** değerine ulaştığı gözlemlenir.
 
-i = 1’den N’e kadar tekrarla:
-    Eğer x çift ise:
-        x ← x / 2
-    Değilse:
-        x ← 3*x + 1
+Örnek bir dizi (n = 7):
 
-    rastgele_sayi ← x mod mod
-    rastgele_sayi ekrana yazdır
+7 → 22 → 11 → 34 → 17 → 52 → 26 → 13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1
 
-Bitir
+Bu dizinin düzensiz davranışı, rastgelelik benzeri bir yapı üretmek için kullanılmıştır.
 
-## AKIŞ ŞEMASI
+---
 
-BAŞLA
-  |
-Seed, N, mod al
-  |
-x = seed
-  |
-i = 1
-  |
-i ≤ N ?
- ├─ Hayır → BİTİR
- └─ Evet
-        |
-      x çift mi?
-       ├─ Evet → x = x / 2
-       └─ Hayır → x = 3x + 1
-              |
-        r = x mod mod
-              |
-          r yazdır
-              |
-          i = i + 1
-              |
-        geri → i ≤ N ?
+## Kullanılan Yöntemin Açıklaması
+
+Projede, kullanıcıdan alınan başlangıç değeri (seed) üzerinden Collatz adımları
+ardışık olarak uygulanır.
+
+Her adımda elde edilen sayı:
+- `mod` işlemi ile belirli bir aralığa indirgenir
+- Böylece sözde rastgele bir sayı üretilmiş olur
+
+Bu işlem istenilen miktarda tekrar edilerek bir çıktı dizisi elde edilir.
+
+---
+
+## Algoritmanın Görsel Akışı
+
+Algoritmanın çalışma mantığı aşağıdaki akış diyagramı ile gösterilmiştir:
+
+![Akış Diyagramı](akis_diyagrami.png)
+
+---
+
+## Algoritmanın Sözde Kodu
+
+Aşağıda, kullanılan yöntemin sadeleştirilmiş sözde kodu verilmiştir:
+
+ALGORITHM Collatz_Based_PRNG
+
+INPUT:
+    seed  → başlangıç değeri (seed > 1)
+    N     → üretilecek sayı miktarı
+    mod   → çıktı sınırlandırma değeri
+
+PROCESS:
+    x ← seed
+
+    FOR i ← 1 TO N DO
+        IF x MOD 2 = 0 THEN
+            x ← x / 2
+        ELSE
+            x ← 3 * x + 1
+        END IF
+
+        rastgele_sayi ← x MOD mod
+        rastgele_sayi değerini listeye ekle
+    END FOR
+
+OUTPUT:
+    sözde rastgele sayı dizisi
+
+END
+
+---
+
+## Yöntemin Sınırlamaları
+
+Bu çalışmada geliştirilen yöntem deterministik bir yapıdadır.
+Aynı seed değeri kullanıldığında her çalıştırmada aynı çıktı üretilir.
+
+Bu nedenle:
+- Gerçek kriptografik güvenlik sağlamaz
+- Sadece akademik ve kavramsal amaçlarla kullanılması uygundur
+
+Amaç, Collatz dizisinin düzensiz yapısının
+rastgelelik benzeri davranış üretmedeki potansiyelini göstermektir.
+
+---
+
+## Çalışmanın Amacı
+
+Bu çalışmanın amacı,
+Collatz Varsayımı’nın düzensiz sayı davranışını kullanarak
+basit bir sözde rastgele sayı üretim mekanizmasının
+nasıl tasarlanabileceğini göstermektir.
+
+---
+
+## NOT:
+Bu çalışmada sunulan yöntem, matematiksel bir problem olan Collatz Varsayımı’nın
+düzensiz ve öngörülemez davranışından faydalanılarak tasarlanmış
+basit bir sözde rastgele sayı üretim yaklaşımıdır.
+
+Elde edilen çıktılar istatistiksel olarak rastgelelik hissi verse de,
+algoritma deterministik yapıdadır ve başlangıç değeri bilindiğinde
+üretilen diziler tamamen tekrar edilebilir.
+
+Bu nedenle geliştirilen yöntem;
+- Kriptografik standartlarla karşılaştırılabilir değildir,
+- Gerçek güvenlik uygulamaları için önerilmez,
+- Eğitim, analiz ve algoritma tasarımı bakış açısıyla ele alınmalıdır.
+
+Çalışmanın temel katkısı, matematiksel dizilerin
+rastgelelik benzeri davranışlarının
+bilgi güvenliği bağlamında nasıl yorumlanabileceğini göstermektir.
 
 
-
-```bash
-python collatz_rng2.py

@@ -45,7 +45,7 @@ Bu işlem istenilen miktarda tekrar edilerek bir çıktı dizisi elde edilir.
 
 Algoritmanın çalışma mantığı aşağıdaki akış diyagramı ile gösterilmiştir:
 
-![Akış Diyagramı](akiş_diyagram.png)
+![Collatz Tabanlı Rastgele Sayı Üretici Akış Diyagramı](akis_diyagrami.png)
 
 ---
 
